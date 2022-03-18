@@ -5,15 +5,14 @@ namespace library
     /*--------------------------------------------------------------------
       Global Variables
     --------------------------------------------------------------------*/
-    /*--------------------------------------------------------------------
-      TODO: Initialize global variables (remove the comment)
-    --------------------------------------------------------------------*/
+    using namespace Microsoft::WRL;
+
     HINSTANCE               g_hInstance = nullptr;
     HWND                    g_hWnd = nullptr;
     D3D_DRIVER_TYPE         g_driverType = D3D_DRIVER_TYPE_NULL;
     D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
-    ID3D11Device* g_pd3dDevice = nullptr;
-    ID3D11Device1* g_pd3dDevice1 = nullptr;
+    ComPtr<ID3D11Device> g_pd3dDevice = nullptr;
+    ComPtr<ID3D11Device1> g_pd3dDevice1 = nullptr;
     ID3D11DeviceContext* g_pImmediateContext = nullptr;
     ID3D11DeviceContext1* g_pImmediateContext1 = nullptr;
     IDXGISwapChain* g_pSwapChain = nullptr;
@@ -178,7 +177,7 @@ namespace library
         if (dxgiFactory2)
         {
             // DirectX 11.1 or later
-            hr = g_pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&g_pd3dDevice1));
+            hr = g_pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), &g_pd3dDevice1);
             if (SUCCEEDED(hr))
             {
                 (void)g_pImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&g_pImmediateContext1));
@@ -193,7 +192,7 @@ namespace library
             sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
             sd.BufferCount = 1;
 
-            hr = dxgiFactory2->CreateSwapChainForHwnd(g_pd3dDevice, g_hWnd, &sd, nullptr, nullptr, &g_pSwapChain1);
+            hr = dxgiFactory2->CreateSwapChainForHwnd(g_pd3dDevice.Get(), g_hWnd, &sd, nullptr, nullptr, &g_pSwapChain1);
             if (SUCCEEDED(hr))
             {
                 hr = g_pSwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&g_pSwapChain));
@@ -217,7 +216,7 @@ namespace library
             sd.SampleDesc.Quality = 0;
             sd.Windowed = TRUE;
 
-            hr = dxgiFactory->CreateSwapChain(g_pd3dDevice, &sd, &g_pSwapChain);
+            hr = dxgiFactory->CreateSwapChain(g_pd3dDevice.Get(), &sd, &g_pSwapChain);
         }
 
         // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
@@ -272,8 +271,4 @@ namespace library
         g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::MidnightBlue);
         g_pSwapChain->Present(0, 0);
     }
-
-    /*--------------------------------------------------------------------
-      TODO: Function definitions (remove this comment)
-    --------------------------------------------------------------------*/
 }
