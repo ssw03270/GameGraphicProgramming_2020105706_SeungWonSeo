@@ -47,7 +47,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         library::CleanupDevice();
         return 0;
     }
-    // Main message loop
+
     MSG msg = { 0 };
 
     while (WM_QUIT != msg.message)
@@ -59,7 +59,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         }
         else
         {
-            library::Render();  // Do some rendering
+            library::Render();
         }
     }
 
