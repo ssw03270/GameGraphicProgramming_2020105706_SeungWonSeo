@@ -65,5 +65,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     library::CleanupDevice();
 
+
     return static_cast<INT>(msg.wParam);
+    //
 }
