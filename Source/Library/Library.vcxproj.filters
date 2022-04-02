@@ -31,6 +31,9 @@
     <Filter Include="헤더 파일\Renderer">
       <UniqueIdentifier>{eb1bf5f8-04a3-484b-b818-ada556463527}</UniqueIdentifier>
     </Filter>
+    <Filter Include="리소스 파일\Shaders">
+      <UniqueIdentifier>{d17d1d96-0901-45a1-9394-0711f2b539f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -48,6 +51,9 @@
     <ClInclude Include="Renderer\Renderer.h">
       <Filter>헤더 파일\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Game.cpp">
@@ -59,5 +65,18 @@
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>소스 파일\Renderer</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Lab03_PS.hlsl">
+      <Filter>리소스 파일\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Lab03_VS.hlsl">
+      <Filter>리소스 파일\Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Lab03.fxh">
+      <Filter>리소스 파일\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

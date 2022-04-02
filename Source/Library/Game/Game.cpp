@@ -15,10 +15,11 @@ namespace library
     /*--------------------------------------------------------------------
       TODO: Game::Game definition (remove the comment)
     --------------------------------------------------------------------*/
-	Game::Game(PCWSTR pszGameName)
-	{
-		m_pszGameName = pszGameName;
-	}
+	Game::Game(_In_ PCWSTR pszGameName)
+		: m_pszGameName(pszGameName)
+		, m_mainWindow(std::make_unique<library::MainWindow>())
+		, m_renderer(std::make_unique<library::Renderer>())
+	{ }
 	/*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
 	  Method:   Game::Initialize
 
@@ -38,18 +39,21 @@ namespace library
     /*--------------------------------------------------------------------
       TODO: Game::Initialize definition (remove the comment)
     --------------------------------------------------------------------*/
-	HRESULT Game::Initialize(HINSTANCE hInstance, INT nCmdShow)
+	HRESULT Game::Initialize(_In_ HINSTANCE hInstance, _In_ INT nCmdShow)
 	{
-		m_mainWindow = std::make_unique<MainWindow>();
-		m_renderer = std::make_unique<Renderer>();
+		HRESULT hr = S_OK;
 
-		if (FAILED(m_mainWindow->Initialize(hInstance, nCmdShow, m_pszGameName))) {
-			return 0;
-		}
+		hr = (m_mainWindow->Initialize(hInstance, nCmdShow, m_pszGameName));
+		if (FAILED(hr))
+			return hr;
 
-		if (FAILED(m_renderer->Initialize(m_mainWindow->GetWindow()))) {
-			return 0;
-		}
+		HWND m_hWnd;
+
+		m_hWnd = m_mainWindow->GetWindow();
+
+		hr = m_renderer->Initialize(m_hWnd);
+		if (FAILED(hr))
+			return hr;
 
 		return S_OK;
 	}
@@ -61,13 +65,15 @@ namespace library
 	  Returns:  INT
 				  Status code to return to the operating system
 	M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
+    /*--------------------------------------------------------------------
+      TODO: Game::Run definition (remove the comment)
+    --------------------------------------------------------------------*/
 	INT Game::Run()
 	{
 		MSG msg = { 0 };
-
 		while (WM_QUIT != msg.message)
 		{
-			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 			{
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
@@ -88,8 +94,11 @@ namespace library
 	  Returns:  PCWSTR
 				  Name of the game
 	M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
+    /*--------------------------------------------------------------------
+      TODO: Game::GetGameName definition (remove the comment)
+    --------------------------------------------------------------------*/
 	PCWSTR Game::GetGameName() const
 	{
-		return PCWSTR();
+		return L"Sample window Class";
 	}
 }
