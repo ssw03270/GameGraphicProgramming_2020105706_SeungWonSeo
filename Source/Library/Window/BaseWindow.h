@@ -1,4 +1,4 @@
-﻿/*+===================================================================
+/*+===================================================================
   File:      BASEWINDOW.H
 
   Summary:   BaseWindow header file contains declarations of the 
@@ -205,19 +205,21 @@ namespace library
         _In_opt_ HWND hWndParent,
         _In_opt_ HMENU hMenu)
     {
-        WNDCLASSEX wcex;
-        wcex.cbSize = sizeof(WNDCLASSEX);
-        wcex.style = CS_HREDRAW | CS_VREDRAW;
-        wcex.lpfnWndProc = DerivedType::WindowProc;
-        wcex.cbClsExtra = 0;
-        wcex.cbWndExtra = 0;
-        wcex.hInstance = hInstance;
-        wcex.hIcon = 0;
-        wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-        wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-        wcex.lpszMenuName = nullptr;
-        wcex.lpszClassName = GetWindowClassName();
-        wcex.hIconSm = 0;
+        WNDCLASSEX wcex =
+        {
+            .cbSize = sizeof(WNDCLASSEX),
+            .style = CS_HREDRAW | CS_VREDRAW,
+            .lpfnWndProc = DerivedType::WindowProc,
+            .cbClsExtra = 0,
+            .cbWndExtra = 0,
+            .hInstance = hInstance,
+            .hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_TUTORIAL),
+            .hCursor = LoadCursor(nullptr, IDC_ARROW),
+            .hbrBackground = (HBRUSH)(COLOR_WINDOW + 1),
+            .lpszMenuName = nullptr,
+            .lpszClassName = GetWindowClassName(),
+            .hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_TUTORIAL)
+        };
         if (!RegisterClassEx(&wcex))
             return E_FAIL;
 
