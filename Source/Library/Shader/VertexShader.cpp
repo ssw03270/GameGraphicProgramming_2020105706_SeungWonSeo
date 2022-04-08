@@ -56,9 +56,7 @@ namespace library
         // Create the vertex shader
         hr = pDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, m_vertexShader.GetAddressOf());
         if (FAILED(hr))
-        {
             return hr;
-        }
 
         // Define the input layout
         D3D11_INPUT_ELEMENT_DESC layout[] =

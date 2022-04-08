@@ -42,9 +42,7 @@ namespace library
         hr = pDevice->CreateBuffer(&bd, &InitData, m_vertexBuffer.GetAddressOf());
 
         if (FAILED(hr))
-        {
             return hr;
-        }
 
         // Create the index buffer
         bd.Usage = D3D11_USAGE_DEFAULT;
@@ -57,9 +55,7 @@ namespace library
         hr = pDevice->CreateBuffer(&bd, &InitData, m_indexBuffer.GetAddressOf());
 
         if (FAILED(hr))
-        {
             return hr;
-        }
 
         // Create the constant buffer
         bd.Usage = D3D11_USAGE_DEFAULT;
@@ -70,9 +66,7 @@ namespace library
         hr = pDevice->CreateBuffer(&bd, nullptr, m_constantBuffer.GetAddressOf());
 
         if (FAILED(hr))
-        {
             return hr;
-        }
 
         // Initialize the world matrix
         m_world = XMMatrixIdentity();

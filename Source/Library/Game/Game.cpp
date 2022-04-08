@@ -72,10 +72,10 @@ namespace library
 
         FLOAT elapsedTime;
 
-        MSG msg = { 0 };
-
-        QueryPerformanceFrequency(&frequency);
         QueryPerformanceCounter(&startingTime);
+        QueryPerformanceFrequency(&frequency);
+
+        MSG msg = { 0 };
 
         while (WM_QUIT != msg.message)
         {
@@ -87,11 +87,11 @@ namespace library
             else
             {
                 QueryPerformanceCounter(&endingTime);
+
                 elapsedTime = (FLOAT)(endingTime.QuadPart - startingTime.QuadPart);
                 elapsedTime /= (FLOAT)(frequency.QuadPart);
 
                 m_renderer->Update(elapsedTime);
-
                 m_renderer->Render();
             }
         }
