@@ -66,13 +66,13 @@ namespace library
     --------------------------------------------------------------------*/
     INT Game::Run()
     {
-        LARGE_INTEGER startingTime;
-        LARGE_INTEGER endingTime;
+        LARGE_INTEGER startTime;
+        LARGE_INTEGER endTime;
         LARGE_INTEGER frequency;
 
         FLOAT elapsedTime;
 
-        QueryPerformanceCounter(&startingTime);
+        QueryPerformanceCounter(&startTime);
         QueryPerformanceFrequency(&frequency);
 
         MSG msg = { 0 };
@@ -86,9 +86,9 @@ namespace library
             }
             else
             {
-                QueryPerformanceCounter(&endingTime);
+                QueryPerformanceCounter(&endTime);
 
-                elapsedTime = (FLOAT)(endingTime.QuadPart - startingTime.QuadPart);
+                elapsedTime = (FLOAT)(endTime.QuadPart - startTime.QuadPart);
                 elapsedTime /= (FLOAT)(frequency.QuadPart);
 
                 m_renderer->Update(elapsedTime);

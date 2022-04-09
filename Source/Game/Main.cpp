@@ -15,6 +15,7 @@
 
 #include "Cube/Cube01.h"
 #include "Cube/Cube02.h"
+#include "Cube/Cube03.h"
 
 /*--------------------------------------------------------------------
   TODO: Include custom cubes (remove the comment)
@@ -71,6 +72,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     --------------------------------------------------------------------*/
     std::shared_ptr<Cube01> cube01 = std::make_shared<Cube01>();
     std::shared_ptr<Cube02> cube02 = std::make_shared<Cube02>();
+    std::shared_ptr<Cube03> cube03 = std::make_shared<Cube03>();
 
     if (FAILED(game->GetRenderer()->AddRenderable(L"Cube01", cube01)))
     {
@@ -98,6 +100,21 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     }
 
     if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"Cube02", L"MainShader")))
+    {
+        return 0;
+    }
+
+    if (FAILED(game->GetRenderer()->AddRenderable(L"Cube03", cube03)))
+    {
+        return 0;
+    }
+
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"Cube03", L"MainShader")))
+    {
+        return 0;
+    }
+
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"Cube03", L"MainShader")))
     {
         return 0;
     }

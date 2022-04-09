@@ -14,12 +14,14 @@
     <ClCompile Include="Cube\BaseCube.cpp" />
     <ClCompile Include="Cube\Cube01.cpp" />
     <ClCompile Include="Cube\Cube02.cpp" />
+    <ClCompile Include="Cube\Cube03.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube\BaseCube.h" />
     <ClInclude Include="Cube\Cube01.h" />
     <ClInclude Include="Cube\Cube02.h" />
+    <ClInclude Include="Cube\Cube03.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PS.hlsl" />
