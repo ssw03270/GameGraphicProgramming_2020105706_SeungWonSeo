@@ -104,7 +104,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         return 0;
     }
 
-    if (FAILED(game->GetRenderer()->AddRenderable(L"Cube03", cube03)))
+    /*if (FAILED(game->GetRenderer()->AddRenderable(L"Cube03", cube03)))
     {
         return 0;
     }
@@ -117,7 +117,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"Cube03", L"MainShader")))
     {
         return 0;
-    }
+    }*/
 
     if (FAILED(game->Initialize(hInstance, nCmdShow)))
     {

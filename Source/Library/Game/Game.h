@@ -1,4 +1,4 @@
-﻿/*+===================================================================
+/*+===================================================================
   File:      GAME.H
 
   Summary:   Game header file contains declarations of functions
@@ -18,7 +18,6 @@
 
 namespace library
 {
-
     /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
       Class:    Game
 

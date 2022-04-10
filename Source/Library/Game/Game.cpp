@@ -27,7 +27,7 @@ namespace library
 
       Args:     HINSTANCE hInstance
                   Handle to the instance
-                INT nCmdShow
+              INT nCmdShow
                   Is a flag that says whether the main application window
                   will be minimized, maximized, or shown normally
 
@@ -37,7 +37,7 @@ namespace library
                   Status code
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     /*--------------------------------------------------------------------
-      TODO: Game::Initializes definition (remove the comment)
+      TODO: Game::Initialize definition (remove the comment)
     --------------------------------------------------------------------*/
     HRESULT Game::Initialize(_In_ HINSTANCE hInstance, _In_ INT nCmdShow)
     {
@@ -90,6 +90,15 @@ namespace library
 
                 elapsedTime = (FLOAT)(endTime.QuadPart - startTime.QuadPart);
                 elapsedTime /= (FLOAT)(frequency.QuadPart);
+
+                startTime = endTime;
+                
+                m_renderer->HandleInput(
+                    m_mainWindow->GetDirections(),
+                    m_mainWindow->GetMouseRelativeMovement(),
+                    elapsedTime
+                );
+                m_mainWindow->ResetMouseMovement();
 
                 m_renderer->Update(elapsedTime);
                 m_renderer->Render();
