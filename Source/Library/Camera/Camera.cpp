@@ -32,7 +32,6 @@ namespace library
         , m_up()
         , m_rotation()
         , m_view()
-        , m_position(position)
     { }
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Camera::GetEye
@@ -191,17 +190,16 @@ namespace library
         m_cameraUp = XMVector3TransformCoord(DEFAULT_UP, RotateYTempMatrix);
         m_cameraForward = XMVector3TransformCoord(DEFAULT_FORWARD, RotateYTempMatrix);
 
-        m_position += m_moveLeftRight * m_cameraRight;
-        m_position += m_moveUpDown * m_cameraUp;
-        m_position += m_moveBackForward * m_cameraForward;
+        m_eye += m_moveLeftRight * m_cameraRight;
+        m_eye += m_moveUpDown * m_cameraUp;
+        m_eye += m_moveBackForward * m_cameraForward;
 
         m_moveLeftRight = 0.0f;
         m_moveBackForward = 0.0f;
         m_moveUpDown = 0.0f;
 
-        m_at = m_position + m_at;
+        m_at = m_eye + m_at;
 
-        m_eye = m_position;
         m_up = m_cameraUp;
 
         m_view = XMMatrixLookAtLH(m_eye, m_at, m_up);

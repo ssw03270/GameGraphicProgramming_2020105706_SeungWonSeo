@@ -86,7 +86,5 @@ namespace library
 
         XMMATRIX m_rotation;
         XMMATRIX m_view;
-
-        XMVECTOR m_position;
     };
 }

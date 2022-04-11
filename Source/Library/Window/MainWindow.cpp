@@ -121,23 +121,28 @@ namespace library
                     }
                 }
             }
-            RECT rcClip;           // new area for ClipCursor
-            RECT rcOldClip;        // previous area for ClipCursor
+            RECT rc;
+            POINT p1, p2;
 
-            // Record the area in which the cursor can move. 
+            GetClientRect(m_hWnd, &rc);    // 클라이언트 크기
 
-            GetClipCursor(&rcOldClip);
+            // 클라이언트 크기를 좌표로 변환
+            p1.x = rc.left;
+            p1.y = rc.top;
+            p2.x = rc.right;
+            p2.y = rc.bottom;
 
-            // Get the dimensions of the application's window. 
+            // 클라이언트 크기를 스크린 크기로 변환
+            ClientToScreen(m_hWnd, &p1);
+            ClientToScreen(m_hWnd, &p2);
 
-            GetWindowRect(m_hWnd, &rcClip);
+            rc.left = p1.x;
+            rc.top = p1.y;
+            rc.right = p2.x;
+            rc.bottom = p2.y;
 
-            // Confine the cursor to the application's window. 
-
-            ClipCursor(&rcClip);
-
-            // 
-            // Process input from the confined cursor. 
+            //해당 좌표를 기준으로 커서를 고정
+            ClipCursor(&rc);
             break;
         case WM_KEYDOWN:
             if (wParam == 0x44)
