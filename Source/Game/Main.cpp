@@ -6,20 +6,18 @@
   Origin:    http://msdn.microsoft.com/en-us/library/windows/apps/ff729718.aspx
 
   Originally created by Microsoft Corporation under MIT License
-  � 2022 Kyung Hee University
+  © 2022 Kyung Hee University
 ===================================================================+*/
 
 #include "Common.h"
 
+#include <cstdio>
+#include <filesystem>
 #include <memory>
+#include <source_location>
 
-#include "Cube/Cube01.h"
-#include "Cube/Cube02.h"
+#include "Cube/Cube.h"
 #include "Cube/Cube03.h"
-
-/*--------------------------------------------------------------------
-  TODO: Include custom cubes (remove the comment)
---------------------------------------------------------------------*/
 #include "Game/Game.h"
 
 /*F+F+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -45,79 +43,57 @@
 -----------------------------------------------------------------F-F*/
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ INT nCmdShow)
 {
-
 #ifdef _DEBUG
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
-
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    std::unique_ptr<library::Game> game = std::make_unique<library::Game>(L"Game Graphics Programming Lab 04: 3D Spaces and Transformations");
+    std::unique_ptr<library::Game> game = std::make_unique<library::Game>(L"Game Graphics Programming Lab 05: Texture Mapping and Constant Buffers");
 
     std::shared_ptr<library::VertexShader> vertexShader = std::make_shared<library::VertexShader>(L"Shaders/Shaders.fxh", "VS", "vs_5_0");
     if (FAILED(game->GetRenderer()->AddVertexShader(L"MainShader", vertexShader)))
     {
         return 0;
     }
-    
+
     std::shared_ptr<library::PixelShader> pixelShader = std::make_shared<library::PixelShader>(L"Shaders/Shaders.fxh", "PS", "ps_5_0");
     if (FAILED(game->GetRenderer()->AddPixelShader(L"MainShader", pixelShader)))
     {
         return 0;
     }
 
-    /*--------------------------------------------------------------------
-      TODO: Add your cubes and set their shaders (remove the comment)
-    --------------------------------------------------------------------*/
-    std::shared_ptr<Cube01> cube01 = std::make_shared<Cube01>();
-    std::shared_ptr<Cube02> cube02 = std::make_shared<Cube02>();
-    std::shared_ptr<Cube03> cube03 = std::make_shared<Cube03>();
-
-    if (FAILED(game->GetRenderer()->AddRenderable(L"Cube01", cube01)))
+    std::shared_ptr<Cube> cube = std::make_shared<Cube>("seafloor.dds");
+    if (FAILED(game->GetRenderer()->AddRenderable(L"Cube", cube)))
     {
         return 0;
     }
 
-    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"Cube01", L"MainShader")))
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"Cube", L"MainShader")))
     {
         return 0;
     }
 
-    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"Cube01", L"MainShader")))
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"Cube", L"MainShader")))
     {
         return 0;
     }
 
-    if (FAILED(game->GetRenderer()->AddRenderable(L"Cube02", cube02)))
+    std::shared_ptr<Cube03> cube2 = std::make_shared<Cube03>("brick.dds");
+    if (FAILED(game->GetRenderer()->AddRenderable(L"Cube2", cube2)))
     {
         return 0;
     }
 
-    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"Cube02", L"MainShader")))
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"Cube2", L"MainShader")))
     {
         return 0;
     }
 
-    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"Cube02", L"MainShader")))
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"Cube2", L"MainShader")))
     {
         return 0;
     }
-
-    /*if (FAILED(game->GetRenderer()->AddRenderable(L"Cube03", cube03)))
-    {
-        return 0;
-    }
-
-    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"Cube03", L"MainShader")))
-    {
-        return 0;
-    }
-
-    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"Cube03", L"MainShader")))
-    {
-        return 0;
-    }*/
 
     if (FAILED(game->Initialize(hInstance, nCmdShow)))
     {

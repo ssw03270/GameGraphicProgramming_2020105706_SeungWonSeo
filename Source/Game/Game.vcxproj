@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cube\BaseCube.cpp" />
+    <ClCompile Include="Cube\Cube.cpp" />
     <ClCompile Include="Cube\Cube01.cpp" />
     <ClCompile Include="Cube\Cube02.cpp" />
     <ClCompile Include="Cube\Cube03.cpp" />
@@ -19,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube\BaseCube.h" />
+    <ClInclude Include="Cube\Cube.h" />
     <ClInclude Include="Cube\Cube01.h" />
     <ClInclude Include="Cube\Cube02.h" />
     <ClInclude Include="Cube\Cube03.h" />
@@ -29,6 +31,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Shaders.fxh" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="brick.dds" />
+    <Image Include="seafloor.dds" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -9,8 +9,10 @@ namespace library
 
       Modifies: [m_driverType, m_featureLevel, m_d3dDevice, m_d3dDevice1,
                  m_immediateContext, m_immediateContext1, m_swapChain,
-                 m_swapChain1, m_renderTargetView, m_vertexShader,
-                 m_pixelShader, m_vertexLayout, m_vertexBuffer].
+                 m_swapChain1, m_renderTargetView, m_depthStencil,
+                 m_depthStencilView, m_cbChangeOnResize, m_camera,
+                 m_projection, m_renderables, m_vertexShaders, 
+                 m_pixelShaders].
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     /*--------------------------------------------------------------------
       TODO: Renderer::Renderer definition (remove the comment)
@@ -27,11 +29,13 @@ namespace library
         , m_renderTargetView(nullptr)
         , m_depthStencil(nullptr)
         , m_depthStencilView(nullptr)
-        , m_camera({ 0.f, -1.5f, 0.f, 0.f })
+        , m_cbChangeOnResize(nullptr)
+        , m_padding()
+        , m_camera({ 0.0f, 3.0f, -6.0f, 0.0f })
         , m_projection()
-        , m_renderables(std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>())
-        , m_vertexShaders(std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>())
-        , m_pixelShaders(std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>>())
+        , m_renderables(std::unordered_map<std::wstring, std::shared_ptr<Renderable>>())
+        , m_vertexShaders(std::unordered_map<std::wstring, std::shared_ptr<VertexShader>>())
+        , m_pixelShaders(std::unordered_map<std::wstring, std::shared_ptr<PixelShader>>())
     { }
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderer::Initialize
@@ -43,8 +47,9 @@ namespace library
 
       Modifies: [m_d3dDevice, m_featureLevel, m_immediateContext,
                  m_d3dDevice1, m_immediateContext1, m_swapChain1,
-                 m_swapChain, m_renderTargetView, m_vertexShader,
-                 m_vertexLayout, m_pixelShader, m_vertexBuffer].
+                 m_swapChain, m_renderTargetView, m_cbChangeOnResize, 
+                 m_projection, m_camera, m_vertexShaders, 
+                 m_pixelShaders, m_renderables].
 
       Returns:  HRESULT
                   Status code
@@ -246,10 +251,27 @@ namespace library
         m_immediateContext->RSSetViewports(1, &vp);
 
         // Initialize the view matrix
-        
+
+        m_camera.Initialize(m_d3dDevice.Get());
 
         // Initialize the projection matrix
         m_projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
+
+        D3D11_BUFFER_DESC bd = {};
+        // Create the constant buffer
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.ByteWidth = sizeof(CBChangeOnResize);
+        bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bd.CPUAccessFlags = 0;
+
+        hr = m_d3dDevice->CreateBuffer(&bd, nullptr, m_cbChangeOnResize.GetAddressOf());
+        if (FAILED(hr))
+            return hr;
+
+        CBChangeOnResize cbChangesOnResize;
+        cbChangesOnResize.Projection = XMMatrixTranspose(m_projection);
+        m_immediateContext->UpdateSubresource(m_cbChangeOnResize.Get(), 0, nullptr, &cbChangesOnResize, 0, 0);
+
 
         for (auto iterator = m_pixelShaders.begin(); iterator != m_pixelShaders.end(); ++iterator) {
             hr = iterator->second->Initialize(m_d3dDevice.Get());
@@ -420,32 +442,40 @@ namespace library
         //
         m_immediateContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+        CBChangeOnCameraMovement cbChangeOnCameraMovement;
+        cbChangeOnCameraMovement.View = XMMatrixTranspose(m_camera.GetView());
+        m_immediateContext->UpdateSubresource(m_camera.GetConstantBuffer().Get(), 0, nullptr, &cbChangeOnCameraMovement, 0, 0);
+
         for (auto iterator = m_renderables.begin(); iterator != m_renderables.end(); ++iterator) {
             // Set the vertex buffer
             UINT stride = sizeof(SimpleVertex);
             UINT offset = 0;
             m_immediateContext->IASetVertexBuffers(0, 1, iterator->second->GetVertexBuffer().GetAddressOf(), &stride, &offset);
 
-            // Set the index buffer
+            // Set the index  buffer
             m_immediateContext->IASetIndexBuffer(iterator->second->GetIndexBuffer().Get(), DXGI_FORMAT_R16_UINT, 0);
 
             // Set the input layout
             m_immediateContext->IASetInputLayout(iterator->second->GetVertexLayout().Get());
+        
 
-            // Update constant buffer - 1st cube
-            ConstantBuffer cb =
-            {
-                .World = XMMatrixTranspose(iterator->second->GetWorldMatrix()),
-                .View = XMMatrixTranspose(m_camera.GetView()),
-                .Projection = XMMatrixTranspose(m_projection)
-            };
-            m_immediateContext->UpdateSubresource(iterator->second->GetConstantBuffer().Get(), 0, nullptr, &cb, 0, 0);
 
-            // Render a triangles
+            CBChangesEveryFrame cbChangesEveryFrame;
+            cbChangesEveryFrame.World = XMMatrixTranspose(iterator->second->GetWorldMatrix());
+            m_immediateContext->UpdateSubresource(iterator->second->GetConstantBuffer().Get(), 0, nullptr, &cbChangesEveryFrame, 0, 0);
+
+
+            // Renders a triangle
             m_immediateContext->VSSetShader(iterator->second->GetVertexShader().Get(), nullptr, 0);
-            m_immediateContext->VSSetConstantBuffers(0, 1, iterator->second->GetConstantBuffer().GetAddressOf());
+            m_immediateContext->VSSetConstantBuffers(0, 1, m_camera.GetConstantBuffer().GetAddressOf());
+            m_immediateContext->VSSetConstantBuffers(1, 1, m_cbChangeOnResize.GetAddressOf());
+            m_immediateContext->VSSetConstantBuffers(2, 1, iterator->second->GetConstantBuffer().GetAddressOf());
+
             m_immediateContext->PSSetShader(iterator->second->GetPixelShader().Get(), nullptr, 0);
-            m_immediateContext->DrawIndexed(iterator->second->GetNumIndices(), 0, 0);
+            m_immediateContext->PSSetConstantBuffers(2, 1, iterator->second->GetConstantBuffer().GetAddressOf());
+            m_immediateContext->PSSetShaderResources(0, 1, iterator->second->GetTextureResourceView().GetAddressOf());
+            m_immediateContext->PSSetSamplers(0, 1, iterator->second->GetSamplerState().GetAddressOf());
+            m_immediateContext->DrawIndexed(iterator->second->GetNumIndices(), 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
         }
         m_swapChain->Present(0, 0);
     }
