@@ -36,10 +36,14 @@
   <ItemGroup>
     <None Include="Shaders\PhongShaders.fxh" />
     <None Include="Shaders\Shaders.fxh" />
+    <None Include="Shaders\VoxelShaders.fxh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brick.dds" />
     <Image Include="seafloor.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="HeightMap.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

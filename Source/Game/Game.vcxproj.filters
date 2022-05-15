@@ -93,6 +93,9 @@
     <None Include="Shaders\PhongShaders.fxh">
       <Filter>리소스 파일\Shaders</Filter>
     </None>
+    <None Include="Shaders\VoxelShaders.fxh">
+      <Filter>리소스 파일\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="seafloor.dds">
@@ -101,5 +104,10 @@
     <Image Include="brick.dds">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="HeightMap.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
   </ItemGroup>
 </Project>

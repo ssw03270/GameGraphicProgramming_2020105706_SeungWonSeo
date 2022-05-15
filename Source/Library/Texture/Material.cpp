@@ -13,7 +13,7 @@ namespace library
       TODO: Material::Material definition (remove the comment)
     --------------------------------------------------------------------*/
     Material::Material()
-        : pDiffuse()
-        , pSpecular()
+        : pDiffuse(std::shared_ptr<Texture>())
+        , pSpecular(std::shared_ptr<Texture>())
     { }
 }
