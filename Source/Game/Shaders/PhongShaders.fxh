@@ -124,8 +124,9 @@ PS_PHONG_INPUT VSPhong(VS_PHONG_INPUT input)
     output.Pos = mul(input.Pos, World);
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
+
     output.Tex = input.Tex;
-    output.Norm = mul(float4(input.Norm, 1), World).xyz;
+    output.Norm = normalize(mul(float4(input.Norm, 1), World).xyz);
     output.World = mul(input.Pos, World);
 
     return output;
@@ -150,7 +151,7 @@ PS_LIGHT_CUBE_INPUT VSLightCube(VS_PHONG_INPUT input)
 --------------------------------------------------------------------*/
 float4 PSPhong(PS_PHONG_INPUT input) : SV_Target
 {
-    float3 ambient = float3(0.1f, 0.1f, 0.1f);
+    float3 ambient = float3(0.0f, 0.0f, 0.0f);
     float3 diffuse = float3(0.0f, 0.0f, 0.0f);
     float3 specular = float3(0.0f, 0.0f, 0.0f);
 
@@ -158,8 +159,10 @@ float4 PSPhong(PS_PHONG_INPUT input) : SV_Target
 
     for (uint i = 0; i < NUM_LIGHTS; i++)
     {
+        ambient = float3(0.2f, 0.2f, 0.2f) * LightColors[i];
+
         float3 lightDirection = normalize(LightPositions[i].xyz - input.World);
-        diffuse += saturate(dot(input.Norm, lightDirection)) * LightColors[i].xyz;
+        diffuse += max(dot(input.Norm, lightDirection), 0.0f) * LightColors[i].xyz;
 
         float3 reflectDirection = reflect(-lightDirection, input.Norm);
         specular += pow(saturate(dot(viewDirection, reflectDirection)) , 20.0f) * LightColors[i];

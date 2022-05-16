@@ -121,7 +121,7 @@ PS_INPUT VSVoxel(VS_INPUT input)
 
     output.Norm = normalize(mul(float4(input.Norm, 1), World).xyz);
 
-    output.World = mul(input.Pos, World);
+    output.World = mul(input.Pos, input.Transform);
 
     return output;
 }
@@ -149,6 +149,6 @@ float4 PSVoxel(PS_INPUT input) : SV_Target
         float3 reflectDirection = reflect(-lightDirection, input.Norm);
         specular += pow(saturate(dot(viewDirection, reflectDirection)) , 20.0f) * LightColors[i];
     }
-
-    return float4(ambient + diffuse + specular, 1.0f) * OutputColor;
+    
+    return float4((ambient + diffuse + specular) * OutputColor, 1.0f);
 }

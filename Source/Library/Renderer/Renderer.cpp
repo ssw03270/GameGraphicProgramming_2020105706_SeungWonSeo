@@ -654,7 +654,6 @@ namespace library
                 cbChangesEveryFrame.OutputColor = it->second->GetVoxels()[i]->GetOutputColor();
                 m_immediateContext->UpdateSubresource(it->second->GetVoxels()[i]->GetConstantBuffer().Get(), 0, nullptr, &cbChangesEveryFrame, 0, 0);
 
-                // Render
                 m_immediateContext->VSSetShader(it->second->GetVoxels()[i]->GetVertexShader().Get(), nullptr, 0); // exception
                 m_immediateContext->VSSetConstantBuffers(0, 1, m_camera.GetConstantBuffer().GetAddressOf());
                 m_immediateContext->VSSetConstantBuffers(1, 1, m_cbChangeOnResize.GetAddressOf());
@@ -665,8 +664,7 @@ namespace library
                 m_immediateContext->PSSetConstantBuffers(2, 1, it->second->GetVoxels()[i]->GetConstantBuffer().GetAddressOf());
                 m_immediateContext->PSSetConstantBuffers(3, 1, m_cbLights.GetAddressOf());
 
-                // Draw
-                m_immediateContext->DrawIndexedInstanced(it->second->GetVoxels()[i]->GetNumIndices(), it->second->GetVoxels()[i]->GetNumInstances(), 0u, 0, 0u);
+                m_immediateContext->DrawIndexedInstanced(it->second->GetVoxels()[i]->GetNumIndices(), it->second->GetVoxels()[i]->GetNumInstances(), 0, 0, 0);
             }
         }
 

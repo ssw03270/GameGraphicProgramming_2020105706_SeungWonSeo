@@ -156,10 +156,10 @@ namespace library
         }
 
         if (mouseRelativeMovement.X != 0) {
-            m_yaw += mouseRelativeMovement.X * 0.003f;
+            m_yaw += mouseRelativeMovement.X * 0.009f;
         }
         if (mouseRelativeMovement.Y != 0) {
-            m_pitch += mouseRelativeMovement.Y * 0.003f;
+            m_pitch += mouseRelativeMovement.Y * 0.009f;
 
             if (m_pitch > XM_PIDIV2 - 0.001)
             {
