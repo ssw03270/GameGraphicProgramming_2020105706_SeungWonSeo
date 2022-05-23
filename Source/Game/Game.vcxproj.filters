@@ -96,6 +96,9 @@
     <None Include="Shaders\VoxelShaders.fxh">
       <Filter>리소스 파일\Shaders</Filter>
     </None>
+    <None Include="Shaders\SkinningShaders.fxh">
+      <Filter>리소스 파일\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="seafloor.dds">

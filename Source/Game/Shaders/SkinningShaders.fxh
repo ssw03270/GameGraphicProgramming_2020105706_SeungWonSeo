@@ -94,6 +94,9 @@ struct VS_INPUT
     float4 Pos : POSITION;
     float2 Tex : TEXCOORD0;
     float3 Norm : NORMAL;
+    
+    uint4 BoneIndices : BONEINDICES;
+    float4 BoneWeights : BONEWEIGHTS;
 };
 /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
   Struct:   PS_PHONG_INPUT
@@ -117,15 +120,26 @@ struct PS_PHONG_INPUT
 /*--------------------------------------------------------------------
   TODO: Vertex Shader function VSPhong definition (remove the comment)
 --------------------------------------------------------------------*/
-PS_PHONG_INPUT VSPhong(VS_PHONG_INPUT input)
+PS_PHONG_INPUT VSPhong(VS_INPUT  input)
 {
     PS_PHONG_INPUT output = (PS_PHONG_INPUT)0;
-    output.Pos = mul(input.Pos, World);
+
+    matrix skinTransform = (matrix) 0;
+
+    skinTransform += BoneTransforms[input.BoneIndices.x] * input.BoneWeights.x;
+    skinTransform += BoneTransforms[input.BoneIndices.y] * input.BoneWeights.y;
+    skinTransform += BoneTransforms[input.BoneIndices.z] * input.BoneWeights.z;
+    skinTransform += BoneTransforms[input.BoneIndices.w] * input.BoneWeights.w;
+
+    output.Pos = mul(input.Pos, skinTransform);
+    output.Pos = mul(output.Pos, World);
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
 
+    output.Norm = normalize(mul(float4(input.Norm, 0), skinTransform).xyz);
+    output.Norm = normalize(mul(float4(output.Norm, 0), World).xyz);
+
     output.Tex = input.Tex;
-    output.Norm = normalize(mul(float4(input.Norm, 1), World).xyz);
     output.World = mul(input.Pos, World);
 
     return output;
