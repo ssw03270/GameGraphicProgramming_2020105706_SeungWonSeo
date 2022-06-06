@@ -16,13 +16,12 @@ namespace library
 
       Modifies: [m_position, m_color].
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: PointLight::PointLight definition (remove the comment)
-    --------------------------------------------------------------------*/
-    PointLight::PointLight(_In_ const XMFLOAT4& position,  _In_ const XMFLOAT4& color)
+    PointLight::PointLight(_In_ const XMFLOAT4& position, _In_ const XMFLOAT4& color, _In_ FLOAT attenuationDistance)
         : m_position(position)
         , m_color(color)
-    { }
+        , m_attenuationDistance(attenuationDistance)
+    {}
+
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   PointLight::GetPosition
 
@@ -31,13 +30,11 @@ namespace library
       Returns:  const XMFLOAT4&
                   Position of the light
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: PointLight::GetPosition definition (remove the comment)
-    --------------------------------------------------------------------*/
     const XMFLOAT4& PointLight::GetPosition() const
     {
         return m_position;
     }
+
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   PointLight::GetColor
 
@@ -46,13 +43,11 @@ namespace library
       Returns:  const XMFLOAT4&
                   Color of the light
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: PointLight::GetColor definition (remove the comment)
-    --------------------------------------------------------------------*/
     const XMFLOAT4& PointLight::GetColor() const
     {
         return m_color;
     }
+
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   PointLight::Update
 
@@ -64,5 +59,10 @@ namespace library
     void PointLight::Update(_In_ FLOAT deltaTime)
     {
         UNREFERENCED_PARAMETER(deltaTime);
+    }
+
+    FLOAT PointLight::GetAttenuationDistance() const
+    {
+        return m_attenuationDistance;
     }
 }
